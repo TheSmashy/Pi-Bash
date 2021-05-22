@@ -8,4 +8,7 @@ do
 	sleep 0.3
 done
 
+echo 0 >/sys/class/leds/led0/brightness
+sleep 0.3
+
 echo mmc0 | sudo tee /sys/class/leds/led0/trigger
