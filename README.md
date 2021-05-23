@@ -1,2 +1,2 @@
 # Pi-Bash
-Short Bash for Raspberry Pi
+Bash for Raspberry Pi.
