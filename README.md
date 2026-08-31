@@ -1,2 +1,62 @@
-# Pi-Bash (Actually just bash)
-Bash for Raspberry Pi and other bash scripts I want to keep outside my personal code library.
+# Pi-Bash (actually just Bash)
+
+This repository is my Raspberry Pi and Linux **junk drawer**: small Bash scripts, machine-specific experiments, operational snippets, and notes that were useful enough to save but not important enough to become their own projects.
+
+Some of these files are old. Some are gloriously specific to one Raspberry Pi. They are references and starting points—not a polished toolkit, production defaults, or a promise that cloning the repository and running everything is a good idea.
+
+## Layout
+
+- **`scripts/`** — small Raspberry Pi and Linux utilities
+- **`install/`** — one-off installation helpers
+- **`examples/`** — configuration examples to review and adapt
+- **`docs/`** — notes, opinions, and cron theology
+
+## Contents
+
+| File | What it does | Important assumptions |
+| --- | --- | --- |
+| `scripts/Temp.sh` | Prints CPU temperature in Celsius and Fahrenheit | Reads Linux thermal zone 0 and requires `bc` |
+| `scripts/pitemp.sh` | Prints Raspberry Pi CPU and GPU temperatures | Expects the Pi thermal interface and `vcgencmd` |
+| `scripts/cpuinfo.sh` | Displays Raspberry Pi clock information | Requires `vcgencmd`; available clock sources vary |
+| `scripts/blink_two.sh` | Blinks the activity LED twice, then restores the `mmc0` trigger | Requires root and the legacy `led0` sysfs path |
+| `scripts/ready_blink.sh` | Blinks the activity LED as a readiness signal | Requires root and the legacy `led0` sysfs path |
+| `scripts/ready_three.sh` | Three-blink readiness variant | Same hardware assumptions as the other LED scripts |
+| `scripts/ready_five.sh` | Historical readiness variant | Currently also blinks three times; retained as found |
+| `scripts/crednotify.sh` | Watches a Responder capture file and triggers an LED notification | Hard-coded lab paths; authorized security testing only |
+| `install/Log2Ram.sh` | Installs Log2Ram from the Azlux package repository | Modifies APT configuration and requires administrative privileges |
+| `examples/sshd_config.d/60-pi-bash.conf` | Historical SSH server configuration example | Review against your OpenSSH version; do not copy blindly |
+| `docs/CronThoughts.md` | Deeply serious cron guidance | Coffee recommended |
+
+## Before running anything
+
+Read the script first. In particular:
+
+- Expect hard-coded paths, Raspberry Pi model assumptions, and commands that require root.
+- Test on a disposable or recoverable system before using a script on a machine you care about.
+- Treat files in `examples/` as historical references, not secure defaults.
+- Keep an existing SSH session open and run `sshd -t` before applying SSH changes.
+- Understand Log2Ram's durability and memory tradeoffs before installing it.
+- Treat captured authentication material as sensitive and use the security-related script only on systems you are authorized to test.
+
+Typical usage is deliberately boring:
+
+```bash
+chmod +x scripts/pitemp.sh
+./scripts/pitemp.sh
+```
+
+Run [ShellCheck](https://www.shellcheck.net/) against a script before adapting it for anything serious:
+
+```bash
+shellcheck scripts/*.sh install/*.sh
+```
+
+## Philosophy
+
+This repository is organized enough that future-me can find things, but it is still a junk drawer. Scripts may be cleaned up over time when they get reused; they do not need to grow into a framework merely because they live on GitHub.
+
+Log or it didn't run. Dry-run first. Silencing cron output is malpractice.
+
+## License
+
+GPL-3.0. See [LICENSE](LICENSE).
